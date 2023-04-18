@@ -1,6 +1,5 @@
 const fs = require ('fs')
-const filename = './datos.txt'
-
+const filename = './src/data/datos.txt'
 class TicketManager {
 
     generateID = (productos) => {
@@ -18,7 +17,7 @@ class TicketManager {
     // Se obtiene el producto a traves del ID
     getProductById = (productId) => {    
         const productos= this.getProducts()
-        const producto = productos.find((events) => events.id === productId)
+        const producto = productos.find((events) => events.id=== productId)
         if (producto) return producto
         return console.log('Error: Producto no encontrado en los archivos')
     }
@@ -62,10 +61,21 @@ class TicketManager {
 }
 
 const manager= new TicketManager();
-console.log(manager.getProducts())
-manager.addProduct('producto prueba', 'Este es un producto prueba', 200, 'Sin imagen', 'abc123', 25)
-console.log(manager.getProducts())
-manager.getProductById(1)
-manager.updateProduct(1, 'stock', 1000)
-manager.addProduct('ore', 'gallet', 100, 'mg', 2, 10)
-manager.deleteProduct(1)
+module.exports = manager
+// console.log(manager.getProducts())
+// manager.addProduct('producto prueba', 'Este es un producto prueba', 200, 'Sin imagen', 'abc123', 25)
+// console.log(manager.getProducts())
+// manager.getProductById(1)
+// manager.updateProduct(1, 'stock', 1000)
+// manager.addProduct('ore', 'gallet', 100, 'mg', 2, 10)
+// manager.deleteProduct(1)
+// manager.addProduct('producto prueba1', 'Este es un producto prueba1', 200, 'Sin imagen1', 'abc1', 25)
+// manager.addProduct('producto prueba2', 'Este es un producto prueba2', 201, 'Sin imagen2', 'abc2', 30)
+// manager.addProduct('producto prueba3', 'Este es un producto prueba3', 202, 'Sin imagen3', 'abc3', 35)
+// manager.addProduct('producto prueba4', 'Este es un producto prueba4', 203, 'Sin imagen4', 'abc4', 45)
+// manager.addProduct('producto prueba5', 'Este es un producto prueba5', 204, 'Sin imagen5', 'abc5', 55)
+// manager.addProduct('producto prueba6', 'Este es un producto prueba6', 205, 'Sin imagen6', 'abc6', 65)
+// manager.addProduct('producto prueba7', 'Este es un producto prueba7', 206, 'Sin imagen7', 'abc7', 75)
+// manager.addProduct('producto prueba8', 'Este es un producto prueba8', 207, 'Sin imagen8', 'abc8', 85)
+// manager.addProduct('producto prueba9', 'Este es un producto prueba9', 208, 'Sin imagen9', 'abc9', 95)
+// manager.addProduct('producto prueba10', 'Este es un producto prueba10', 209, 'Sin imagen10', 'abc10', 15)
