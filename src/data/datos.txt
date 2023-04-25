@@ -1,12 +1,12 @@
 [
 	{
 		"id": 1,
-		"title": "producto prueba1",
-		"description": "Este es un producto prueba1",
+		"title": "produasdasdasd",
+		"description": "HOOLALGLALSDLADS",
 		"price": 200,
-		"thumbnail": "Sin imagen1",
-		"code": "abc1",
-		"stock": 25
+		"thumbnail": "HOLAHOLAHOLAHOLA",
+		"code": "aasdasdas",
+		"stock": 43454354353
 	},
 	{
 		"id": 2,
@@ -37,12 +37,12 @@
 	},
 	{
 		"id": 5,
-		"title": "producto prueba5",
-		"description": "Este es un producto prueba5",
-		"price": 204,
-		"thumbnail": "Sin imagen5",
-		"code": "abc5",
-		"stock": 55
+		"title": "produasdasdasd",
+		"description": "HOOLALGLALSDLADS",
+		"price": 200,
+		"thumbnail": "HOLAHOLAHOLAHOLA",
+		"code": "aasdasdas",
+		"stock": 43454354353
 	},
 	{
 		"id": 6,
@@ -63,15 +63,6 @@
 		"stock": 75
 	},
 	{
-		"id": 8,
-		"title": "producto prueba8",
-		"description": "Este es un producto prueba8",
-		"price": 207,
-		"thumbnail": "Sin imagen8",
-		"code": "abc8",
-		"stock": 85
-	},
-	{
 		"id": 9,
 		"title": "producto prueba9",
 		"description": "Este es un producto prueba9",
@@ -82,11 +73,11 @@
 	},
 	{
 		"id": 10,
-		"title": "producto prueba10",
-		"description": "Este es un producto prueba10",
-		"price": 209,
-		"thumbnail": "Sin imagen10",
-		"code": "abc10",
-		"stock": 15
+		"title": "produasdasdasd",
+		"description": "HOOLALGLALSDLADS",
+		"price": 200,
+		"thumbnail": "HOLAHOLAHOLAHOLA",
+		"code": "aasdasdas",
+		"stock": 43454354353
 	}
 ]

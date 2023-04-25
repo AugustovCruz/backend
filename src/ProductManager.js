@@ -1,6 +1,10 @@
-const fs = require ('fs')
+import fs from 'fs' // ES MODULES
 const filename = './src/data/datos.txt'
 class TicketManager {
+
+    constructor() {
+        this.products = []; 
+    }
 
     generateID = (productos) => {
         if (productos.length === 0) return 1
@@ -49,6 +53,38 @@ class TicketManager {
             fs.writeFileSync(filename, JSON.stringify(productos, null,'\t' ))
         } else console.log('No se encontraron los datos para actualizar')
     }
+    // Actualizo y creo el producto con los campos nuevos ingresados
+    addUpdateProduct  = async (title, description, price, thumbnail , code, stock, status, category) => {
+        const productos= this.getProducts()
+        const id = this.generateID(productos)
+        const product = {id, title, description, price, thumbnail , code, stock, status, category}
+        // Validacion de campos que sean obligatorios
+        if (!title  || !description || !price || !thumbnail || !code || !stock || !status || !category) {
+            return console.log ('Faltan datos')
+        }
+        // Validacion para que no se repita el Codigo
+        const index = productos.findIndex((p) => p.code === code);
+        if (index !== -1) {
+            return console.log("Error, hay un codigo repetido");
+        }
+        
+        productos.push(product)
+        await fs.writeFileSync(filename, JSON.stringify(productos, null, '\t'))
+    }
+    //Actualizo los productos desde el req.body
+
+    updateParams = (id, productoBody) => {
+        let productosTotal = this.getProducts()
+        const product = productosTotal.find(el => el.id === id)
+        if (product) {
+            Object.assign(product, productoBody)
+            fs.writeFileSync(filename, JSON.stringify(productosTotal, null, '\t'))
+            console.log(`Producto actualizado: ${JSON.stringify(product)}`)
+        } else {
+            console.log(`No se encontró ningún producto con el ID: ${id}`)
+        }
+    }
+
     // Se elimina el producto segun el ID ingresado
     deleteProduct = async (id) => {
         const productos= this.getProducts()
@@ -61,7 +97,9 @@ class TicketManager {
 }
 
 const manager= new TicketManager();
-module.exports = manager
+export default manager
+
+// module.exports = manager
 // console.log(manager.getProducts())
 // manager.addProduct('producto prueba', 'Este es un producto prueba', 200, 'Sin imagen', 'abc123', 25)
 // console.log(manager.getProducts())
