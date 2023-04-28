@@ -24,17 +24,17 @@ router.get ('', (req, res) => {
 router.post ('/',(req, res) => {
     const product = req.body
     const numFields = Object.keys(product).length 
-    if ( numFields==8 && product.status == false) {
+    if ( numFields==8 && product.status == true) {
         manager.addUpdateProduct(product.title, product.description, product.price, product.thumbnail, product.code, product.stock, product.status, product.category)
         res.send ('Producto añadido')
-    } else res.send ('Se necesita un status:true para añadir el producto, como tambien 8 campos ingresados')
+    } else res.send ('Se necesita un status:true para añadir el producto, como tambien 8 campos ingresados: category & status')
 })
 // Metodo para Actualizar por el req.body
 router.put('/:pid', (req, res) => {
     const productId = parseInt(req.params.pid);
     const productBody = req.body;
     const numFields = Object.keys(productBody).length
-    if (numFields == 6) {
+    if (numFields == 6 ) {
         manager.updateParams(productId, productBody)
         res.send(`Product with ID ${productId} has been updated`)
     } else res.send('Solo es valido actualizar con 6 campos ingresados. Denied: category and status ')

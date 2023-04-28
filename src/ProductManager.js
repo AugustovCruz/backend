@@ -71,11 +71,12 @@ class TicketManager {
         productos.push(product)
         await fs.writeFileSync(filename, JSON.stringify(productos, null, '\t'))
     }
+    
     //Actualizo los productos desde el req.body
-
     updateParams = (id, productoBody) => {
         let productosTotal = this.getProducts()
         const product = productosTotal.find(el => el.id === id)
+
         if (product) {
             Object.assign(product, productoBody)
             fs.writeFileSync(filename, JSON.stringify(productosTotal, null, '\t'))
