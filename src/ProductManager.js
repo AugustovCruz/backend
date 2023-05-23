@@ -1,5 +1,8 @@
 import fs from 'fs' // ES MODULES
+import productModel from './dao/models/product.model.js'
+
 const filename = './src/data/datos.txt'
+
 class TicketManager {
 
     constructor() {
@@ -7,27 +10,31 @@ class TicketManager {
     }
 
     generateID = (productos) => {
+        console.log(productos)
         if (productos.length === 0) return 1
         return productos[productos.length-1].id + 1
     }
     //Se obtiene la lista de productos leyendo el archivo
-    getProducts = () => {
-        if( fs.existsSync(filename)){
-            const contenido = JSON.parse(fs.readFileSync(filename, 'utf-8'))
+    getProducts = async () => {
+        // if( fs.existsSync(filename))
+        if( productModel.find().lean().exec()){
+            // const contenido = JSON.parse(fs.readFileSync(filename, 'utf-8'))
+            const contenido = await productModel.find().lean().exec()
             return contenido
         } 
         return []
     }
     // Se obtiene el producto a traves del ID
-    getProductById = (productId) => {    
-        const productos= this.getProducts()
+    getProductById = async (productId) => {    
+        // const productos= this.getProducts()
+        const productos = await productModel.find().lean().exec()
         const producto = productos.find((events) => events.id=== productId)
         if (producto) return producto
         return console.log('Error: Producto no encontrado en los archivos')
     }
     // Agrego productos y genero un ID automatico
     addProduct  = async (title, description, price, thumbnail , code, stock) => {
-        const productos= this.getProducts()
+        const productos= await this.getProducts()
         const id = this.generateID(productos)
         const product = {id, title, description, price, thumbnail , code, stock}
         // Validacion de campos que sean obligatorios
@@ -40,12 +47,14 @@ class TicketManager {
         if (index !== -1) {
             return console.log("Error, hay un codigo repetido");
         }
-        productos.push(product)
-        await fs.writeFileSync(filename, JSON.stringify(productos, null, '\t'))
+        // productos.push(product)
+        // await fs.writeFileSync(filename, JSON.stringify(productos, null, '\t'))
+        const productGenerated = new productModel(product)
+        await productGenerated.save()
     }
     //Actualizo valores de un producto del campo segun la key ingresada
-    updateProduct = (id, key, value ) => {
-        const productos = this.getProducts()
+    updateProduct = async (id, key, value ) => {
+        const productos = await this.getProducts()
         
         let item = productos.find( el => (el.id === id))
         if (item && item.hasOwnProperty(key)){
@@ -55,7 +64,8 @@ class TicketManager {
     }
     // Actualizo y creo el producto con los campos nuevos ingresados
     addUpdateProduct  = async (title, description, price, thumbnail , code, stock, status, category) => {
-        const productos= this.getProducts()
+        const productos=  await this.getProducts()
+        // const productos = await productModel.find().lean().exec()
         const id = this.generateID(productos)
         const product = {id, title, description, price, thumbnail , code, stock, status, category}
         // Validacion de campos que sean obligatorios
@@ -68,22 +78,34 @@ class TicketManager {
             return console.log("Error, hay un codigo repetido");
         }
         
-        productos.push(product)
-        await fs.writeFileSync(filename, JSON.stringify(productos, null, '\t'))
+        // productos.push(product)
+        // await fs.writeFileSync(filename, JSON.stringify(productos, null, '\t'))
+        const productGenerated = new productModel(product)
+        await productGenerated.save()
     }
     
     //Actualizo los productos desde el req.body
-    updateParams = (id, productoBody) => {
-        let productosTotal = this.getProducts()
-        const product = productosTotal.find(el => el.id === id)
+    updateParams = async (id, productoBody) => {
+        // let productosTotal = this.getProducts()
+        // const product = productosTotal.find(el => el.id === id)
 
-        if (product) {
-            Object.assign(product, productoBody)
-            fs.writeFileSync(filename, JSON.stringify(productosTotal, null, '\t'))
-            console.log(`Producto actualizado: ${JSON.stringify(product)}`)
-        } else {
-            console.log(`No se encontró ningún producto con el ID: ${id}`)
+        // if (product) {
+        //     Object.assign(product, productoBody)
+        //     fs.writeFileSync(filename, JSON.stringify(productosTotal, null, '\t'))
+            
+
+        //     console.log(`Producto actualizado: ${JSON.stringify(product)}`)
+        // } else {
+        //     console.log(`No se encontró ningún producto con el ID: ${id}`)
+        // }
+        try {
+            await productModel.updateOne({ id }, { ...productoBody })
+            res.send('200')
+        } catch(err) {
+            console.log('error.....')
+            res.send({err})
         }
+
     }
 
     // Se elimina el producto segun el ID ingresado

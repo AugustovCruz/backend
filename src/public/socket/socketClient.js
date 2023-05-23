@@ -7,6 +7,7 @@ socket.on('products', (products) => {
 
     products.forEach((product) => {
         const listItem = document.createElement('li');
+        listItem.classList.add('item-product')
         listItem.innerText = `${product.title} - ${product.description} - ${product.price} - ${product.thumbnail} - ${product.code} - ${product.stock}`;
         productList.append(listItem);
     });

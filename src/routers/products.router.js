@@ -1,11 +1,20 @@
 import { Router } from 'express'
 import manager from '../ProductManager.js'
+import productModel from '../dao/models/product.model.js'
 
 const router = Router()
 
-router.get ('/:id', (req, res) => {
+router.get ('/', async (req, res) => {
+    const limit = req.query.limit
+    const delimitation = await manager.getProducts()
+    const limitedResults = delimitation.slice(0, limit)
+    res.send(limitedResults)
+})
+
+router.get ('/:id', async (req, res) => {
     const id = req.params.id
-    const result = manager.getProducts().find(item => item.id == id)
+    const productos = await manager.getProducts()
+    const result = await productos.find(item => item.id == id)
     if (!result) return res.send({
         code: 404,
         message: 'El producto indicado no existe'
@@ -13,12 +22,6 @@ router.get ('/:id', (req, res) => {
     // console.log(result)
     res.send(result )
 } )
-
-router.get ('', (req, res) => {
-    const limit = req.query.limit
-    const delimitation = manager.getProducts().slice(0, limit)
-    res.send(delimitation)
-})
 
 //agregar un nuevo producto con los campos vistos y ademas con status:boolean, category: string y un array de thumbnails
 router.post ('/',(req, res) => {
@@ -30,22 +33,30 @@ router.post ('/',(req, res) => {
     } else res.send ('Se necesita un status:true para añadir el producto, como tambien 8 campos ingresados: category & status')
 })
 // Metodo para Actualizar por el req.body
-router.put('/:pid', (req, res) => {
-    const productId = parseInt(req.params.pid);
+router.put('/:pid', async (req, res) => {
+    const id = parseInt(req.params.pid);
     const productBody = req.body;
-    const numFields = Object.keys(productBody).length
-    if (numFields == 6 ) {
-        manager.updateParams(productId, productBody)
-        res.send(`Product with ID ${productId} has been updated`)
-    } else res.send('Solo es valido actualizar con 6 campos ingresados. Denied: category and status ')
-});
+    try {
+        await productModel.updateOne({ id }, { ...productBody })
+        res.sendStatus(200)
+    } catch(err) {
+        console.log('error.....')
+        res.send({err})
+    }
+})
 
-router.delete ('/:pid', (req, res) => {
+router.delete ('/:pid', async (req, res) => {
     const id = req.params.pid
-    if (manager.getProductById(+id)) {
-        manager.deleteProduct(+id)
-        res.send('producto eliminado')
-    } else return res.send(`producto con el ID: ${id} not found`)  
+    // if (manager.getProductById(+id)) {
+    //     manager.deleteProduct(+id)
+    //     res.send('producto eliminado')
+    // } else return res.send(`producto con el ID: ${id} not found`)  
+    try {
+        await productModel.deleteOne({ id })
+        res.send(`Producto ${id} borrado exitosamente!`)
+    } catch (err) {
+        res.send({err})
+    }
 })
 
 export default router
